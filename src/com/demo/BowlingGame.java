@@ -9,13 +9,16 @@ public class BowlingGame {
 	public static void main(String[] args) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		BowlingCore bowlingCore = new BowlingCore(); 
-		while (true) {
+		Boolean gameFinished = false;
+		while (!gameFinished) {
 			String line = in.readLine();
 			try {
-				bowlingCore.evaluateInput(Integer.parseInt(line));
+				gameFinished = bowlingCore.evaluateInput(Integer.parseInt(line));
+				bowlingCore.printResult();
 			} catch (NumberFormatException exception) {
 				System.out.println("NumberFormatException");
 			}
 		}
+
 	}
 }
