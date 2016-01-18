@@ -6,6 +6,7 @@ import java.util.Map;
 public class BowlingCore {
     
     	int currentFrameNo = 1;
+    	int currentFrameBall = 1;
     	Map<Integer, Frame> frameMap;
     	
     	public BowlingCore() {
@@ -18,6 +19,9 @@ public class BowlingCore {
 		// TODO
 	    } else {
 		Frame frame = new Frame(currentFrameNo);
+		
+		
+		
 		frameMap.put(currentFrameNo, frame);
 
 	    }
