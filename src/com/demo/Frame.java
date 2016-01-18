@@ -6,5 +6,10 @@ public class Frame {
     private int frameNo;
     private int totalPoint;
     private List<Integer>  knockDowns;
+    private boolean frameCompleted;
+    
+    public Frame(int frameNo) {
+	this.frameNo = frameNo;
+    }
 
 }
