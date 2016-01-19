@@ -7,7 +7,7 @@ public class Frame {
 	int frameNo;
 	int totalPoint;
 	List<Integer> knockDowns;
-	boolean frameCompleted;
+	boolean completed;
 	int firstBall;
 	int secondBall;
 

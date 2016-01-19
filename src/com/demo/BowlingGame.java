@@ -13,8 +13,14 @@ public class BowlingGame {
 		while (!gameFinished) {
 			String line = in.readLine();
 			try {
-				gameFinished = bowlingCore.evaluateInput(Integer.parseInt(line));
+			    int input = Integer.parseInt(line);
+			    if (input >= 0 && input <= 10) {
+				gameFinished = bowlingCore.evaluateInput(input);
 				bowlingCore.printResult();
+			    } else {
+				System.out.println("Not in the range, 1-10!");
+			    }
+				
 			} catch (NumberFormatException exception) {
 				System.out.println("NumberFormatException");
 			}

@@ -20,7 +20,7 @@ public class BowlingCore {
 			Frame frame = frameMap.get(currentFrameNo);
 			frame.knockDowns.add(input);
 			if (frame.knockDowns.size() == 2) {
-				frame.frameCompleted = true;
+				frame.completed = true;
 				for (Integer numberOfKnowDowns : frame.knockDowns) {
 					frame.totalPoint += numberOfKnowDowns;
 				}
@@ -44,7 +44,7 @@ public class BowlingCore {
 			// }
 		}
 
-		if (currentFrameNo == 11) {
+		if (currentFrameNo == 5) {
 			return true;
 		}
 
@@ -55,7 +55,7 @@ public class BowlingCore {
 	public void printResult() {
 
 		for (Frame frame : frameMap.values()) {
-			if (frame.frameCompleted) {
+			if (frame.completed) {
 				for (Integer knowDown : frame.knockDowns) {
 					System.out.print(knowDown + ", ");
 				}
