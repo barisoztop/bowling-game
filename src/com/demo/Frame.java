@@ -3,13 +3,14 @@ package com.demo;
 import java.util.LinkedList;
 import java.util.List;
 
+// Use adapter
 public class Frame {
 	int frameNo;
 	int totalPoint;
 	List<Integer> knockDowns;
 	boolean completed;
-	int firstBall;
-	int secondBall;
+	int numberOfBallsRequiredToComplete;
+	int totalPointFromNextBalls;
 
 	public Frame(int frameNo) {
 		this.frameNo = frameNo;

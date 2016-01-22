@@ -1,6 +1,9 @@
 package com.demo;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class BowlingCore {
@@ -9,44 +12,41 @@ public class BowlingCore {
 	int currentFrameNo = 1;
 	int currentFrameBall = 1;
 	Map<Integer, Frame> frameMap;
+	List<Frame> incompletedFrames;
+
 
 	public BowlingCore() {
 		frameMap = new HashMap<Integer, Frame>();
+		incompletedFrames = new LinkedList<Frame>();
 	}
 
 	public boolean evaluateInput(int input) {
-		// 1
-		if (frameMap.get(currentFrameNo) != null) {
-			Frame currentFrame = frameMap.get(currentFrameNo);
-			currentFrame.knockDowns.add(input);
-			if (currentFrame.knockDowns.size() == 2) {
-				// Check previous frame's completion status 
-				
-				int previousFrameNo = currentFrameNo - 1;
-				if (previousFrameNo > 0 && !frameMap.get(previousFrameNo).completed) {
-					Frame previousFrame = frameMap.get(previousFrameNo);
-					previousFrame.completed = true;
-					previousFrame.totalPoint += (previousFrameNo - 1 > 0 ? frameMap.get(previousFrameNo - 1).totalPoint : 0);
-					previousFrame.totalPoint += STRIKE;
-					for (Integer numberOfKnowDowns : currentFrame.knockDowns) {
-						previousFrame.totalPoint += numberOfKnowDowns;
-					}
-				}
+		checkIncompletedFrames(input);
 
-				currentFrame.completed = true;
-				currentFrame.totalPoint += calculateTotalPoint(currentFrameNo);
+		boolean existingFrame = frameMap.get(currentFrameNo) != null;
+		if (existingFrame) {
+			Frame frame = frameMap.get(currentFrameNo);
+			frame.knockDowns.add(input);
+			if (frame.knockDowns.size() == 2) {
+				// Check previous frame's completion status 
+				if (incompletedFrames.size() > 0) {
+//					incompletedFrames.add(frame);
+				} else {
+					frame.completed = true;
+					frame.totalPoint += calculateTotalPoint(currentFrameNo);
+				}
 
 				currentFrameNo++;
 			}
 		} else {
 			Frame frame = new Frame(currentFrameNo);
-			// frame.firstBall = input;
 			frame.knockDowns.add(input);
 			frameMap.put(currentFrameNo, frame);
 			
 			 if (input == STRIKE) {
 				 // TODO Check previous frame too
-				 frameMap.put(currentFrameNo, frame);
+				 frame.numberOfBallsRequiredToComplete = 2;
+				 incompletedFrames.add(frame);
 				 currentFrameNo++;
 			 }
 		}
@@ -59,6 +59,19 @@ public class BowlingCore {
 
 	}
 	
+	private void checkIncompletedFrames(int currentKnockDowns) {
+		for (Iterator<Frame> iterator = incompletedFrames.iterator(); iterator.hasNext();) {
+			Frame frame = (Frame) iterator.next();
+			frame.numberOfBallsRequiredToComplete--;
+			frame.totalPointFromNextBalls += currentKnockDowns;
+			if (frame.numberOfBallsRequiredToComplete == 0) {
+				frame.totalPoint += calculateTotalPoint(frame.frameNo) + frame.totalPointFromNextBalls;
+				frame.completed = true;
+				iterator.remove();
+			}
+		}
+	}
+
 	public int calculateTotalPoint(int currentFrameNo) {
 		if (currentFrameNo < 1) {
 			return 0;
