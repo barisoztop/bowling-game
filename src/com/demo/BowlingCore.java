@@ -21,6 +21,7 @@ public class BowlingCore {
 			currentFrame.knockDowns.add(input);
 			if (currentFrame.knockDowns.size() == 2) {
 				// Check previous frame's completion status 
+				calculateTotalPoint(currentFrameNo);
 				int previousFrameNo = currentFrameNo - 1;
 				if (previousFrameNo > 0 && !frameMap.get(previousFrameNo).completed) {
 					Frame previousFrame = frameMap.get(previousFrameNo);
@@ -60,6 +61,24 @@ public class BowlingCore {
 
 		return false;
 
+	}
+	
+	public int calculateTotalPoint(int currentFrameNo) {
+		int previousFrameNo = currentFrameNo - 1;
+		if (previousFrameNo < 1) {
+			return 0;
+		} else if (frameMap.get(previousFrameNo).completed) {
+			Frame previousFrame = frameMap.get(previousFrameNo);
+			return previousFrame.totalPoint;
+		}
+		
+		Frame previousFrame = frameMap.get(previousFrameNo);
+		int pointsFromKnockDowns = 0;
+		for (Integer numberOfKnockDowns : previousFrame.knockDowns) {
+			pointsFromKnockDowns += numberOfKnockDowns;
+		}
+		
+		return (pointsFromKnockDowns + calculateTotalPoint(currentFrameNo - 1));
 	}
 
 	public void printResult() {
