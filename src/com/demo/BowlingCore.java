@@ -27,17 +27,14 @@ public class BowlingCore {
 		if (existingFrame) {
 			Frame frame = frameMap.get(currentFrameNo);
 			frame.knockDowns.add(input);
-			if (frame.knockDowns.size() == 2) {
-				// Check previous frame's completion status 
-				if (incompletedFrames.size() > 0) {
-//					incompletedFrames.add(frame);
-				} else {
-					frame.completed = true;
-					frame.totalPoint += calculateTotalPoint(currentFrameNo);
-				}
-
-				currentFrameNo++;
+			if (frame.knockDowns.get(0) + input == 10) {
+				frame.numberOfBallsRequiredToComplete = 1;
+				incompletedFrames.add(frame);
+			} else {
+				frame.totalPoint += calculateTotalPoint(currentFrameNo);
+				frame.completed = true; // TODO move it to the above method
 			}
+			currentFrameNo++;
 		} else {
 			Frame frame = new Frame(currentFrameNo);
 			frame.knockDowns.add(input);
@@ -51,7 +48,7 @@ public class BowlingCore {
 			 }
 		}
 
-		if (currentFrameNo == 5) {
+		if (currentFrameNo == 4) { // 11
 			return true;
 		}
 
