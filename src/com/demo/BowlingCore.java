@@ -27,10 +27,9 @@ public class BowlingCore {
 		boolean existingFrame = frameMap.get(currentFrameNo) != null;
 		if (existingFrame) {
 			Frame frame = frameMap.get(currentFrameNo);
-			if (currentFrameNo != LAST_FRAME) {
-				frame.knockDowns.add(input);
-			}
+
 			if (frame.knockDowns.get(0) + input == 10) {
+				frame.knockDowns.add(input);
 				frame.numberOfBallsRequiredToComplete = 1;
 				incompletedFrames.add(frame);
 				if (currentFrameNo != LAST_FRAME) {
@@ -38,6 +37,7 @@ public class BowlingCore {
 				}
 			} else {
 				if (currentFrameNo != LAST_FRAME) {
+					frame.knockDowns.add(input);
 					frame.totalPoint += calculateTotalPoint(currentFrameNo);
 					frame.completed = true; // TODO move it to the above method
 					currentFrameNo++;
