@@ -56,7 +56,7 @@ public class BowlingCore {
 			 }
 		}
 
-		if (currentFrameNo == LAST_FRAME + 1 && incompletedFrames.size() == 0) { // 11
+		if (currentFrameNo == LAST_FRAME && incompletedFrames.size() == 0) { // 11
 			return true;
 		}
 
@@ -97,13 +97,9 @@ public class BowlingCore {
 	public void printResult() {
 
 		for (Frame frame : frameMap.values()) {
-			if (frame.completed) {
-				for (Integer knowDown : frame.knockDowns) {
-					System.out.print(knowDown + ", ");
-				}
-				
-				System.out.print("total point: " + frame.totalPoint);
-				System.out.println();
+			System.out.println("FRAME NO: "  + frame.frameNo + ", TOTAL POINT: " + frame.totalPoint);
+			for (int i=0; i < frame.knockDowns.size(); i++) {
+				System.out.println("--BALL " + (i + 1) + ": " + frame.knockDowns.get(i));
 			}
 		}
 
