@@ -9,6 +9,7 @@ import java.util.Map;
 public class BowlingCore {
 
 	private static final int STRIKE = 10; // Move to enum
+	private static final int LAST_FRAME = 10; // Move to enum
 	int currentFrameNo = 1;
 	int currentFrameBall = 1;
 	Map<Integer, Frame> frameMap;
@@ -30,11 +31,16 @@ public class BowlingCore {
 			if (frame.knockDowns.get(0) + input == 10) {
 				frame.numberOfBallsRequiredToComplete = 1;
 				incompletedFrames.add(frame);
+				if (currentFrameNo != LAST_FRAME) {
+					currentFrameNo++;
+				}
 			} else {
-				frame.totalPoint += calculateTotalPoint(currentFrameNo);
-				frame.completed = true; // TODO move it to the above method
+				if (currentFrameNo != LAST_FRAME) {
+					frame.totalPoint += calculateTotalPoint(currentFrameNo);
+					frame.completed = true; // TODO move it to the above method
+					currentFrameNo++;
+				}
 			}
-			currentFrameNo++;
 		} else {
 			Frame frame = new Frame(currentFrameNo);
 			frame.knockDowns.add(input);
@@ -44,11 +50,13 @@ public class BowlingCore {
 				 // TODO Check previous frame too
 				 frame.numberOfBallsRequiredToComplete = 2;
 				 incompletedFrames.add(frame);
-				 currentFrameNo++;
+				 if (currentFrameNo != LAST_FRAME) {
+					 currentFrameNo++;
+				 }
 			 }
 		}
 
-		if (currentFrameNo == 4) { // 11
+		if (currentFrameNo == LAST_FRAME + 1 && incompletedFrames.size() == 0) { // 11
 			return true;
 		}
 
