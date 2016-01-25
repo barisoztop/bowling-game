@@ -29,4 +29,21 @@ public class BowlingCoreTest {
 		}
 		assertEquals(150, fifthFrame.totalPoint);
 	}
+	
+	@Test
+	public void testATypicalGame() {
+		BowlingCore bowlingCore = new BowlingCore(); 
+		Boolean gameFinished = false;
+		int[] inputs = new int[]{1,4,4,5,6,4,5,5,10,0,1,7,3,6,4,10,2,8,6};
+		for (int j = 0; j < inputs.length; j++) {
+			gameFinished = bowlingCore.evaluateInput(inputs[j]);
+		}
+		assertEquals(true, gameFinished);
+		
+		Frame lastFrame = bowlingCore.frameMap.get(10);
+		assertEquals(133, lastFrame.totalPoint);
+		
+		Frame fifthFrame = bowlingCore.frameMap.get(5);
+		assertEquals(60, fifthFrame.totalPoint);
+	}
 }
