@@ -16,10 +16,17 @@ public class BowlingCoreTest {
 		assertEquals(true, gameFinished);
 		
 		Frame lastFrame = bowlingCore.frameMap.get(10);
-		assertEquals(3, lastFrame.knockDowns.size());
+		assertEquals(30, lastFrame.knockDowns.get(0) + lastFrame.totalPointFromNextBalls);
 		for ( int knockDown : lastFrame.knockDowns) {
 			assertEquals(10, knockDown);
 		}
 		assertEquals(300, lastFrame.totalPoint);
+		
+		Frame fifthFrame = bowlingCore.frameMap.get(5);
+		assertEquals(1, fifthFrame.knockDowns.size());
+		for ( int knockDown : fifthFrame.knockDowns) {
+			assertEquals(10, knockDown);
+		}
+		assertEquals(150, fifthFrame.totalPoint);
 	}
 }
