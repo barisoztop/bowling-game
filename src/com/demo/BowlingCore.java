@@ -8,25 +8,22 @@ import java.util.Map;
 
 public class BowlingCore {
 
-	private static final int STRIKE = 10; // Move to enum
-	private static final int LAST_FRAME = 10; // Move to enum
-	int currentFrameNo = 1;
-	int currentFrameBall = 1;
-	Map<Integer, Frame> frameMap;
-	List<Frame> incompletedFrames;
-
+	private static final int STRIKE = 10;
+	private static final int LAST_FRAME = 10;
+	private int currentFrameNo = 1;
+	private final Map<Integer, Frame> frameMap;
+	private final List<Frame> incompletedFrames;
 
 	public BowlingCore() {
 		frameMap = new HashMap<Integer, Frame>();
 		incompletedFrames = new LinkedList<Frame>();
 	}
 
-	public boolean evaluateInput(int input) {
+	public boolean evaluateInput(final int input) {
 		checkIncompletedFrames(input);
 
-		boolean existingFrame = frameMap.get(currentFrameNo) != null;
-		if (existingFrame) {
-			Frame frame = frameMap.get(currentFrameNo);
+		if (getFrameMap().get(currentFrameNo) != null) {
+			final Frame frame = getFrameMap().get(currentFrameNo);
 
 			if (frame.knockDowns.get(0) + input == 10) {
 				frame.knockDowns.add(input);
@@ -39,36 +36,35 @@ public class BowlingCore {
 				if (currentFrameNo != LAST_FRAME) {
 					frame.knockDowns.add(input);
 					frame.totalPoint += calculateTotalPoint(currentFrameNo);
-					frame.completed = true; // TODO move it to the above method
+					frame.completed = true;
 					currentFrameNo++;
 				}
 			}
 		} else {
-			Frame frame = new Frame(currentFrameNo);
+			final Frame frame = new Frame(currentFrameNo);
 			frame.knockDowns.add(input);
-			frameMap.put(currentFrameNo, frame);
-			
-			 if (input == STRIKE) {
-				 // TODO Check previous frame too
-				 frame.numberOfBallsRequiredToComplete = 2;
-				 incompletedFrames.add(frame);
-				 if (currentFrameNo != LAST_FRAME) {
-					 currentFrameNo++;
-				 }
-			 }
+			getFrameMap().put(currentFrameNo, frame);
+
+			if (input == STRIKE) {
+				frame.numberOfBallsRequiredToComplete = 2;
+				incompletedFrames.add(frame);
+				if (currentFrameNo != LAST_FRAME) {
+					currentFrameNo++;
+				}
+			}
 		}
 
-		if (currentFrameNo == LAST_FRAME && incompletedFrames.size() == 0) { // 11
+		if (currentFrameNo == LAST_FRAME && incompletedFrames.size() == 0) {
 			return true;
 		}
 
 		return false;
 
 	}
-	
-	private void checkIncompletedFrames(int currentKnockDowns) {
-		for (Iterator<Frame> iterator = incompletedFrames.iterator(); iterator.hasNext();) {
-			Frame frame = (Frame) iterator.next();
+
+	private void checkIncompletedFrames(final int currentKnockDowns) {
+		for (final Iterator<Frame> iterator = incompletedFrames.iterator(); iterator.hasNext();) {
+			final Frame frame = iterator.next();
 			frame.numberOfBallsRequiredToComplete--;
 			frame.totalPointFromNextBalls += currentKnockDowns;
 			if (frame.numberOfBallsRequiredToComplete == 0) {
@@ -79,32 +75,36 @@ public class BowlingCore {
 		}
 	}
 
-	public int calculateTotalPoint(int currentFrameNo) {
+	public int calculateTotalPoint(final int currentFrameNo) {
 		if (currentFrameNo < 1) {
 			return 0;
-		} else if (frameMap.get(currentFrameNo).completed) {
-			Frame currentFrame = frameMap.get(currentFrameNo);
+		} else if (getFrameMap().get(currentFrameNo).completed) {
+			final Frame currentFrame = getFrameMap().get(currentFrameNo);
 			return currentFrame.totalPoint;
 		}
-		
-		Frame currentFrame = frameMap.get(currentFrameNo);
+
+		final Frame currentFrame = getFrameMap().get(currentFrameNo);
 		int pointsFromKnockDowns = 0;
-		for (Integer numberOfKnockDowns : currentFrame.knockDowns) {
+		for (final Integer numberOfKnockDowns : currentFrame.knockDowns) {
 			pointsFromKnockDowns += numberOfKnockDowns;
 		}
-		
+
 		return (pointsFromKnockDowns + calculateTotalPoint(currentFrameNo - 1));
 	}
 
 	public void printResult() {
 
-		for (Frame frame : frameMap.values()) {
-			System.out.println("FRAME NO: "  + frame.frameNo + ", TOTAL POINT: " + frame.totalPoint);
-			for (int i=0; i < frame.knockDowns.size(); i++) {
+		for (final Frame frame : getFrameMap().values()) {
+			System.out.println("FRAME NO: " + frame.frameNo + ", TOTAL POINT: " + frame.totalPoint);
+			for (int i = 0; i < frame.knockDowns.size(); i++) {
 				System.out.println("--BALL " + (i + 1) + ": " + frame.knockDowns.get(i));
 			}
 		}
 
+	}
+
+	public Map<Integer, Frame> getFrameMap() {
+		return frameMap;
 	}
 
 }
