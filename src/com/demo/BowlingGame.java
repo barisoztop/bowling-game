@@ -11,7 +11,7 @@ public class BowlingGame {
 		final BowlingCore bowlingCore = new BowlingCore();
 		Boolean gameFinished = false;
 		while (!gameFinished) {
-			System.out.print("INPUT: ");
+			System.out.print("----------------\nINPUT: ");
 			final String line = in.readLine();
 			try {
 				final int input = Integer.parseInt(line);
