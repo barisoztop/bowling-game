@@ -95,9 +95,13 @@ public class BowlingCore {
 	public void printResult() {
 
 		for (final Frame frame : getFrameMap().values()) {
-			System.out.println("FRAME NO: " + frame.frameNo + ", TOTAL POINT: " + frame.totalPoint);
+			System.out.println("FRAME NO: " + frame.frameNo);
+
 			for (int i = 0; i < frame.knockDowns.size(); i++) {
 				System.out.println("--BALL " + (i + 1) + ": " + frame.knockDowns.get(i));
+			}
+			if (frame.completed) {
+				System.out.println("TOTAL POINT: " + frame.totalPoint);
 			}
 		}
 
